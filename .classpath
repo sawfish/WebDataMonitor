@@ -24,5 +24,6 @@
 	<classpathentry kind="lib" path="lib/lucene.jar"/>
 	<classpathentry kind="lib" path="lib/spring-mock.jar"/>
 	<classpathentry kind="lib" path="lib/spring.jar"/>
+	<classpathentry kind="lib" path="lib/postgresql-8.4-703.jdbc4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

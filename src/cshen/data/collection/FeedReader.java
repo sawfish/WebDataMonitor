@@ -19,9 +19,11 @@ public class FeedReader {
 	 * @param args
 	 */
 	public static void main(String[] args) throws Exception {
-		PersistentManagedFeeds db = new PersistentManagedFeeds();
-		db.setFileOfFeeds("tmp.txt");
-		db.setFileOfItems("tmp.items.txt");
+		PersistentManagedFeeds db;
+//		db = new TextPersistentManagedFeeds();
+//		db.setFileOfFeeds("tmp.txt");
+//		db.setFileOfItems("tmp.items.txt");
+		db = new DBPersistentManagedFeeds();
 		ManagedFeeds mf = new ManagedFeeds();
 		mf.setPersistence(db);
 		FeedReader fr = new FeedReader();
@@ -98,19 +100,24 @@ public class FeedReader {
 		if (feedMeta != null) {
 			Date savedLastPubDate = feedMeta.getLastPubDate();
 			if (savedLastPubDate != null && !lastPubDate.after(savedLastPubDate)) {
-				return new FeedMeta(savedLastPubDate, new Date());
+				FeedMeta newMeta = feedMeta.clone();
+				newMeta.setLastCheckDate(new Date());
+				return newMeta;
 			}
 		}
 		
 		for (ItemIF item : items) {
-			if (feedMeta == null || item.getDate().after(feedMeta.getLastPubDate())) {
+			if (feedMeta == null || feedMeta.getLastPubDate() == null || item.getDate().after(feedMeta.getLastPubDate())) {
 				mf.addNewItem(rss, item);
 			} else {
 				break;
 			}
 		}
 		
-		return new FeedMeta(lastPubDate, new Date());
+		FeedMeta newMeta = feedMeta.clone();
+		newMeta.setLastPubDate(lastPubDate);
+		newMeta.setLastCheckDate(new Date());
+		return newMeta;
 	}
 	
 	public void stop() {

@@ -61,15 +61,28 @@ public class ManagedFeeds {
 	static public class FeedMeta {
 		private Date lastPubDate;
 		private Date lastCheckDate;
-		
+		private int id;
 		
 		public FeedMeta(Date lastPubDate, Date lastCheckDate) {
+			this(-1, lastPubDate, lastCheckDate);
+		}
+		
+
+		public FeedMeta(int id, Date lastPubDate, Date lastCheckDate) {
 			super();
+			this.id = id;
 			this.lastPubDate = lastPubDate;
 			this.lastCheckDate = lastCheckDate;
 		}
+		
+		public FeedMeta clone() {
+			return new FeedMeta(id, lastPubDate, lastCheckDate);
+		}
 
-
+		public int getId() {
+			return id;
+		}
+		
 		public Date getLastCheckDate() {
 			return lastCheckDate;
 		}
